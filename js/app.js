@@ -22,10 +22,16 @@ let elSearchRatingInput = $(".js-search-form__rating-input", elSearchForm);
 let elSearchGanreSelect = $(".js-search-form__genre-select", elSearchForm);
 let elSearchSortSelect = $(".js-search-form__sort-select", elSearchForm);
 
+
 let elSearchResults = $(".search-results");
 
 let elSearchResultTemplate = $("#search-result-template").content;
 /* Faqatgina ozgaruvchilar yozilgam bu yerga */
+
+let elModalMovie = $(".js-modal-movie")
+
+let elResultList = $(".result-list")
+
 
 let renderResult = (searchResult) => {
   elSearchResults.innerHTML = ""
@@ -35,12 +41,13 @@ let renderResult = (searchResult) => {
   searchResult.forEach(movie => {
     let elMovie = elSearchResultTemplate.cloneNode(true)
 
-    $(".movie__poster", elMovie).src = movie.bigPoster
+
+    $(".search-result__item", elMovie).dataset.imdbId = movie.imdbId;
     $(".movie__title", elMovie).textContent = movie.title
     $(".movie__year", elMovie).textContent = movie.year
     $(".movie__rating", elMovie).textContent = movie.imdbRating
     $(".movie__trailer-link", elMovie).href = movie.trailer
-
+    $(".movie__poster", elMovie).src = movie.bigPoster
 
     elResultFragment.appendChild(elMovie)
   })
@@ -109,9 +116,6 @@ let sortSearchResults = (results, sortTypee) => {
       }
     });
   } else if (sortTypee === "rating_asc") {
-    results.forEach(result => {
-      console.log(result.imdbRating);
-    })
     return results.sort((a, b) => {
       if (a.imdbRating > b.imdbRating) {
         return 1;
@@ -174,89 +178,22 @@ elSearchForm.addEventListener("submit", (evt) => {
 
   renderResult(searchResults)
 })
+renderResult(normalizedMovies.slice(0, 100))
 
+let elModelEvtResult = (searchModal) => {
+  if (searchModal.target.matches(".js-movie-info-button")) {
+    let movieId = searchModal.target.closest(".search-result__item").dataset.imdbId;
 
+    let foundMovie = normalizedMovies.find(movie => {
+      return movie.imdbId === movieId;
+    })
 
+    $(".img-modal", elModalMovie).src = foundMovie.bigPoster
+    $(".js-modal-movie-title", elModalMovie).textContent = foundMovie.title;
+    $(".js-modal-movie-summary", elModalMovie).textContent = foundMovie.summary.slice(0, 300);
+  }
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-// let createGenreSelectOptions = () => {
-//   let moviesCategories = [];
-
-//   normalizedMovies.slice(0, 50).forEach((movie) => {
-//     movie.categories.forEach((category) => {
-//       if (!moviesCategories.includes(category)) {
-//         moviesCategories.push(category);
-//       }
-//     })
-//   });
-
-//   moviesCategories.sort();
-
-//   let elOptionsFragment = document.createDocumentFragment();
-
-//   moviesCategories.forEach((category) => {
-//     let elCategoryOption = document.createElement("option");
-//     elCategoryOption.textContent = category;
-//     elCategoryOption.value = category;
-
-//     elOptionsFragment.appendChild(elCategoryOption);
-//   })
-
-//   elSearchGanreSelect.appendChild(elOptionsFragment);
-// }
-// createGenreSelectOptions();
-
-// let renderResults = (searchResults) => {
-//   elSearchResults.innerHTML = "";
-
-//   let elSearchResultFragment = document.createDocumentFragment();
-
-//   searchResults.forEach((movie) => {
-//     let elMovie = elSearchResultTemplate.cloneNode(true);
-
-//     $(".movie__poster", elMovie).src = movie.smallPoster;
-//     $(".movie__title", elMovie).textContent = movie.title;
-//     $(".movie__year", elMovie).textContent = movie.year;
-//     $(".movie__rating", elMovie).textContent = movie.imdbRating;
-//     $(".movie__trailer-link", elMovie).href = movie.trailer;
-
-//     elSearchResultFragment.appendChild(elMovie);
-//   });
-
-//   elSearchResults.appendChild(elSearchResultFragment);
-// }
-
-// let findMovies = (title, minRating, genre) => {
-//   return normalizedMovies.filter((movie) => {
-//     let doesMatchCategory = genre === "All" || movie.categories.includes(genre);
-
-//     return movie.title.match(title) && movie.imdbRating >= minRating && doesMatchCategory;
-//   })
-// }
-
-// elSearchForm.addEventListener("submit", (evt) => {
-//   evt.preventDefault();
-
-//   let searchTitle = elSearchTitleInput.value.trim();
-//   let movieTitleRegex = new RegExp(searchTitle, "gi");
-
-//   let minimumRating = Number(elSearchRatingInput.value);
-
-//   let genre = elSearchGanreSelect.value;
-
-//   let searchResults = findMovies(movieTitleRegex, minimumRating, genre);
-
-//   renderResults(searchResults);
-// });
+elSearchResults.addEventListener("click", (evt) => {
+  elModelEvtResult(evt)
+})

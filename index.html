@@ -39,6 +39,10 @@
 
             <button class="btn btn-primary btn-block" type="sumbit">Search</button>
           </form>
+
+          <ul class="result-list">
+
+          </ul>
         </section>
 
         <section class="col-md-8">
@@ -52,6 +56,27 @@
       </div>
     </div>
   </main>
+
+  <!-- Modal -->
+  <div class="modal fade js-modal-movie" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <img class="img-modal me-3 rounded-1" src="" alt="" width="300" height="150">
+          <h5 class="modal-title js-modal-movie-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body js-modal-movie-summary">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <!-- TEMPLATES -->
 
@@ -69,19 +94,28 @@
           </div>
 
           <div class="card-text py-2">
-            <img src="./img/star.svg" alt="Star" width="25" height="25">
-            <span class="movie__rating ps-2">7.5</span>
+
+            <button class="button border-0 bg-transparent">
+              <img src="./img/star.svg" alt="Star" width="25" height="25">
+              <span class="movie__rating ps-2">7.5</span>
+            </button>
           </div>
 
-          <div class="card-text">
-            <a class="movie__trailer-link" href="" target="_blank">Watch trailer</a>
+          <div class="d-flex align-items-center justify-content-between">
+            <div class="card-text">
+              <a class="movie__trailer-link" href="" target="_blank">Watch trailer</a>
+            </div>
+            <button class="btn btn-primary js-movie-info-button" type="button" data-bs-toggle="modal"
+              data-bs-target="#exampleModal">
+              More info
+            </button>
           </div>
         </div>
       </div>
     </li>
   </template>
 
-
+  <script src="./bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="./js/movies.js"></script>
   <script src="./js/util.js"></script>
   <script src="./js/app.js"></script>
